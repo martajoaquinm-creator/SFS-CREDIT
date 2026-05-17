@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SFS Crédit — Hipotecas sin complicaciones</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --navy:#0f1f3d;
+    --navy-mid:#1a3260;
+    --gold:#b8953a;
+    --gold-light:#d4af6a;
+    --gold-pale:#fdf6e8;
+    --gold-border:#e8d4a0;
+    --white:#ffffff;
+    --bg:#f8f9fc;
+    --text:#0f1f3d;
+    --text-muted:#6b7a95;
+    --border:rgba(15,31,61,0.09);
+    --border-md:rgba(15,31,61,0.13);
+  }
+  html{scroll-behavior:smooth}
+  body{font-family:'DM Sans',sans-serif;background:var(--white);color:var(--text);line-height:1.6;padding-bottom:80px}
+
+  /* COOKIE BANNER */
+  .cookie-banner{position:fixed;bottom:0;left:0;right:0;background:var(--navy);color:white;padding:14px 28px;z-index:200;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;box-shadow:0 -4px 24px rgba(15,31,61,0.18);transition:transform .4s ease}
+  .cookie-banner.hidden{transform:translateY(110%)}
+  .cookie-text{font-size:13px;color:rgba(255,255,255,0.8);flex:1;min-width:220px}
+  .cookie-text a{color:var(--gold-light);text-decoration:underline;cursor:pointer}
+  .cookie-actions{display:flex;gap:10px;flex-shrink:0}
+  .btn-accept{background:var(--gold);color:var(--navy);border:none;padding:8px 20px;border-radius:100px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:background .2s}
+  .btn-accept:hover{background:var(--gold-light)}
+  .btn-reject{background:transparent;color:rgba(255,255,255,0.6);border:1px solid rgba(255,255,255,0.2);padding:8px 20px;border-radius:100px;font-family:'DM Sans',sans-serif;font-size:13px;cursor:pointer;transition:all .2s}
+  .btn-reject:hover{border-color:rgba(255,255,255,0.5);color:white}
+
+  /* NAV */
+  nav{background:var(--white);border-bottom:1px solid var(--border);padding:14px 40px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+  .nav-logo{display:flex;align-items:center;gap:10px}
+  .nav-logo-text{color:var(--navy);font-family:'Playfair Display',serif;font-size:20px;font-weight:700;letter-spacing:.5px}
+  .nav-logo-text span{color:var(--gold)}
+  .nav-phone{color:var(--navy);font-size:14px;font-weight:600;display:flex;align-items:center;gap:8px;text-decoration:none;background:var(--gold-pale);border:1px solid var(--gold-border);padding:8px 18px;border-radius:100px;transition:background .2s}
+  .nav-phone:hover{background:#f5ecd6}
+  .phone-dot{width:7px;height:7px;background:#22c55e;border-radius:50%;animation:pulse 2s infinite;display:inline-block}
+  @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.6;transform:scale(1.3)}}
+
+  /* HERO */
+  .hero{background:var(--white);padding:80px 40px 70px;text-align:center;border-bottom:1px solid var(--border);position:relative;overflow:hidden}
+  .hero-bg-circle1{position:absolute;top:-100px;right:-100px;width:400px;height:400px;border-radius:50%;background:radial-gradient(circle,rgba(184,149,58,0.06) 0%,transparent 70%);pointer-events:none}
+  .hero-bg-circle2{position:absolute;bottom:-120px;left:-80px;width:350px;height:350px;border-radius:50%;background:radial-gradient(circle,rgba(15,31,61,0.04) 0%,transparent 70%);pointer-events:none}
+  .badge-top{display:inline-flex;align-items:center;gap:8px;background:var(--gold-pale);border:1px solid var(--gold-border);color:var(--gold);font-size:11px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;padding:7px 20px;border-radius:100px;margin-bottom:28px}
+  .hero h1{font-family:'Playfair Display',serif;font-size:clamp(30px,5vw,52px);font-weight:900;color:var(--navy);line-height:1.15;margin-bottom:8px;position:relative;z-index:1}
+  .hero h1 em{font-style:normal;color:var(--gold)}
+  .hero-sub{font-size:clamp(14px,2vw,17px);color:var(--text-muted);max-width:580px;margin:16px auto 0;font-weight:300;position:relative;z-index:1}
+  .hero-divider{width:50px;height:2px;background:var(--gold-border);margin:28px auto}
+  .promises{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;position:relative;z-index:1}
+  .promise-pill{background:var(--bg);border:1px solid var(--border-md);color:var(--text-muted);font-size:13px;padding:7px 16px;border-radius:100px;display:flex;align-items:center;gap:7px}
+  .promise-pill .check{color:var(--gold);font-size:14px}
+
+  /* CTA */
+  .cta-section{padding:56px 40px;max-width:900px;margin:0 auto}
+  .cta-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+
+  /* AGENT CARD */
+  .agent-card{background:var(--navy);border-radius:20px;padding:30px 26px;color:white;display:flex;flex-direction:column;align-items:flex-start;gap:14px;transition:transform .2s,box-shadow .2s;position:relative;overflow:hidden;text-decoration:none}
+  .agent-card::before{content:'';position:absolute;top:-40px;right:-40px;width:140px;height:140px;border-radius:50%;border:1px solid rgba(184,149,58,0.15)}
+  .agent-card:hover{transform:translateY(-2px);box-shadow:0 12px 32px rgba(15,31,61,0.15)}
+  .card-icon-wrap{width:48px;height:48px;background:rgba(184,149,58,0.12);border:1px solid rgba(184,149,58,0.25);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px}
+  .agent-card h2{font-family:'Playfair Display',serif;font-size:21px;font-weight:700;line-height:1.2;color:white}
+  .agent-card p{font-size:13px;color:rgba(255,255,255,0.6);line-height:1.6}
+  .card-btn{background:var(--gold);color:var(--navy);border:none;padding:11px 22px;border-radius:100px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:7px;text-decoration:none;transition:background .2s,transform .15s;margin-top:4px}
+  .card-btn:hover{background:var(--gold-light);transform:scale(1.02)}
+
+  /* DIAMOND CARD */
+  .diamond-card{background:var(--white);border:1.5px solid var(--gold-border);border-radius:20px;padding:30px 26px;display:flex;flex-direction:column;align-items:flex-start;gap:14px;transition:transform .2s,box-shadow .2s;position:relative}
+  .diamond-card::before{content:'';position:absolute;inset:0;border-radius:20px;background:linear-gradient(135deg,var(--gold-pale) 0%,var(--white) 60%);z-index:0;pointer-events:none}
+  .diamond-card>*{position:relative;z-index:1}
+  .diamond-card:hover{transform:translateY(-2px);box-shadow:0 12px 32px rgba(184,149,58,0.12)}
+  .diamond-icon{width:48px;height:48px;background:var(--navy);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px}
+  .diamond-card h2{font-family:'Playfair Display',serif;font-size:21px;font-weight:700;color:var(--navy);line-height:1.2}
+  .price-highlight{font-family:'Playfair Display',serif;font-size:36px;font-weight:900;color:var(--navy);line-height:1}
+  .price-highlight span{font-size:14px;font-family:'DM Sans',sans-serif;font-weight:400;color:var(--text-muted)}
+  .diamond-card p{font-size:13px;color:var(--text-muted);line-height:1.6}
+  .coupon-badge{display:inline-flex;align-items:center;gap:6px;background:var(--navy);color:var(--gold-light);font-size:11px;font-weight:600;padding:5px 14px;border-radius:100px}
+  .diamond-btn{background:var(--navy);color:var(--white);border:none;padding:11px 22px;border-radius:100px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:7px;text-decoration:none;transition:background .2s,transform .15s;margin-top:4px}
+  .diamond-btn:hover{background:var(--navy-mid);transform:scale(1.02)}
+
+  /* STATS */
+  .spec-grid{padding:0 40px 56px;max-width:900px;margin:0 auto}
+  .spec-row{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+  .spec-item{background:var(--bg);border:1px solid var(--border);border-radius:16px;padding:20px;display:flex;flex-direction:column;gap:6px}
+  .spec-num{font-family:'Playfair Display',serif;font-size:30px;font-weight:900;color:var(--navy);line-height:1}
+  .spec-num em{font-style:normal;color:var(--gold)}
+  .spec-label{font-size:12px;color:var(--text-muted);line-height:1.5}
+
+  /* SERVICES */
+  .services-section{background:var(--bg);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:56px 40px}
+  .services-inner{max-width:900px;margin:0 auto}
+  .services-label{font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:8px}
+  .services-title{font-family:'Playfair Display',serif;font-size:26px;font-weight:700;color:var(--navy);margin-bottom:28px}
+  .service-pills{display:flex;flex-wrap:wrap;gap:10px}
+  .service-pill{background:var(--white);border:1px solid var(--border-md);color:var(--navy);padding:10px 20px;border-radius:100px;font-size:13px;font-weight:500;display:flex;align-items:center;gap:8px;transition:all .2s;cursor:default}
+  .service-pill:hover{border-color:var(--gold-border);background:var(--gold-pale)}
+  .service-pill-dot{color:var(--gold);font-size:14px}
+
+  /* FOOTER */
+  footer{background:var(--white);border-top:1px solid var(--border)}
+  .footer-content{max-width:900px;margin:0 auto;padding:28px 40px;display:flex;flex-direction:column;gap:14px}
+  .footer-top{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px}
+  .footer-brand{font-family:'Playfair Display',serif;font-size:16px;font-weight:700;color:var(--navy)}
+  .footer-brand span{color:var(--gold)}
+  .footer-cta{background:var(--navy);color:white;border:none;padding:9px 22px;border-radius:100px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:7px;text-decoration:none;transition:background .2s}
+  .footer-cta:hover{background:var(--navy-mid)}
+  .footer-links{display:flex;flex-wrap:wrap;gap:14px;align-items:center;border-top:1px solid var(--border);padding-top:14px}
+  .footer-link{font-size:12px;color:var(--text-muted);text-decoration:none;cursor:pointer;transition:color .2s}
+  .footer-link:hover{color:var(--navy)}
+  .footer-sep{color:var(--border-md);font-size:12px}
+  .footer-email{font-size:12px;color:var(--text-muted)}
+  .footer-email a{color:var(--gold);text-decoration:none}
+  .footer-email a:hover{text-decoration:underline}
+
+  /* MODALS */
+  .modal-overlay{display:none;position:fixed;inset:0;background:rgba(15,31,61,0.5);z-index:999;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(2px)}
+  .modal-overlay.active{display:flex}
+  .modal{background:var(--white);border-radius:20px;width:100%;max-width:500px;max-height:90vh;overflow-y:auto;padding:36px 30px;position:relative;animation:slideUp .3s ease;border:1px solid var(--border)}
+  @keyframes slideUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+  .modal-close{position:absolute;top:14px;right:14px;background:var(--bg);border:1px solid var(--border);border-radius:50%;width:32px;height:32px;font-size:16px;cursor:pointer;color:var(--text-muted);display:flex;align-items:center;justify-content:center;line-height:1}
+  .modal-close:hover{background:#eee}
+  .modal h3{font-family:'Playfair Display',serif;font-size:22px;color:var(--navy);margin-bottom:6px}
+  .modal-sub{font-size:13px;color:var(--text-muted);margin-bottom:26px}
+  .question-block{margin-bottom:18px}
+  .question-block label{display:block;font-size:12px;font-weight:600;color:var(--navy);margin-bottom:7px;text-transform:uppercase;letter-spacing:.5px}
+  .question-block select,.question-block input{width:100%;padding:10px 14px;border:1.5px solid var(--border-md);border-radius:10px;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--text);background:var(--bg);outline:none;transition:border-color .2s;appearance:auto}
+  .question-block select:focus,.question-block input:focus{border-color:var(--gold);background:var(--white)}
+  .modal-submit{width:100%;padding:13px;background:var(--navy);color:white;border:none;border-radius:100px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;cursor:pointer;margin-top:8px;transition:background .2s;display:flex;align-items:center;justify-content:center;gap:8px}
+  .modal-submit:hover{background:var(--navy-mid)}
+  .result-msg{display:none;text-align:center;padding:20px 0}
+  .result-icon{font-size:44px;margin-bottom:12px}
+  .result-msg h4{font-family:'Playfair Display',serif;font-size:20px;color:var(--navy);margin-bottom:8px}
+  .result-msg p{font-size:13px;color:var(--text-muted)}
+
+  .privacy-modal{background:var(--white);border-radius:20px;width:100%;max-width:580px;max-height:85vh;overflow-y:auto;padding:36px 30px;position:relative;animation:slideUp .3s ease;border:1px solid var(--border)}
+  .privacy-modal h3{font-family:'Playfair Display',serif;font-size:20px;color:var(--navy);margin-bottom:16px}
+  .privacy-modal h4{font-size:13px;font-weight:600;color:var(--navy);margin:16px 0 6px;text-transform:uppercase;letter-spacing:.5px}
+  .privacy-modal p,.privacy-modal li{font-size:13px;color:var(--text-muted);line-height:1.7;margin-bottom:6px}
+  .privacy-modal ul{padding-left:18px}
+  .privacy-modal a{color:var(--gold)}
+
+  @media(max-width:640px){
+    .cta-grid{grid-template-columns:1fr}
+    nav{padding:12px 20px}
+    .hero{padding:56px 20px 48px}
+    .cta-section{padding:36px 20px}
+    .spec-grid{padding:0 20px 36px}
+    .spec-row{grid-template-columns:1fr}
+    .services-section{padding:36px 20px}
+    .footer-content{padding:22px 20px}
+  }
+</style>
+</head>
+<body>
+
+<!-- COOKIE BANNER -->
+<div class="cookie-banner" id="cookieBanner">
+  <div class="cookie-text">
+    Usamos cookies para mejorar tu experiencia. Consulta nuestra <a onclick="openPrivacy()">Política de Privacidad</a>. Reclamaciones: <a href="mailto:reclamacionessfscredit@gmail.com">reclamacionessfscredit@gmail.com</a>
+  </div>
+  <div class="cookie-actions">
+    <button class="btn-reject" onclick="closeCookie()">Rechazar</button>
+    <button class="btn-accept" onclick="closeCookie()">Aceptar</button>
+  </div>
+</div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">
+    <svg width="30" height="30" viewBox="0 0 32 32" fill="none">
+      <path d="M16 3L2 13v16h28V13L16 3z" stroke="#b8953a" stroke-width="1.5" fill="none"/>
+      <rect x="13" y="22" width="6" height="8" fill="rgba(184,149,58,0.35)"/>
+      <rect x="19" y="8" width="5" height="6" fill="rgba(184,149,58,0.2)"/>
+    </svg>
+    <div class="nav-logo-text">SFS <span>Crédit</span></div>
+  </div>
+  <a href="tel:661078303" class="nav-phone">
+    <span class="phone-dot"></span> 661 078 303
+  </a>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-bg-circle1"></div>
+  <div class="hero-bg-circle2"></div>
+  <div class="badge-top">✦ Asesoramiento 100% personalizado</div>
+  <h1>Tu hipoteca sin<br><em>complicaciones ni sorpresas</em></h1>
+  <p class="hero-sub">En 15 minutos tu hipoteca al alcance — sin pagar 6.000€. Nosotros cerramos contigo.</p>
+  <div class="hero-divider"></div>
+  <div class="promises">
+    <div class="promise-pill"><span class="check">✓</span> Sin sorpresas</div>
+    <div class="promise-pill"><span class="check">✓</span> Todo incluido hasta la firma</div>
+    <div class="promise-pill"><span class="check">✓</span> Expertos hipotecarios</div>
+    <div class="promise-pill"><span class="check">✓</span> Primera vivienda · Subrogación · Autónomos</div>
+  </div>
+</div>
+
+<!-- CTA CARDS -->
+<div class="cta-section">
+  <div class="cta-grid">
+
+    <!-- BOTÓN AGENTE: sustituye ENLACE_AGENTE_AQUI por tu enlace real -->
+    <div class="agent-card">
+      <div class="card-icon-wrap">🤖</div>
+      <h2>¿Es viable mi hipoteca?</h2>
+      <p>Habla con nuestro agente de IA — analiza tu caso en segundos y si es viable te avisamos por WhatsApp.</p>
+      <a href="ENLACE_AGENTE_AQUI" target="_blank" class="card-btn">Consultar con el agente →</a>
+    </div>
+
+    <div class="diamond-card">
+      <div class="diamond-icon">💎</div>
+      <h2>Servicio Premium<br>Todo incluido</h2>
+      <div class="price-highlight">2.500€ <span>máximo · hasta la firma</span></div>
+      <p>Te acompañamos en todo el proceso. Puedes ahorrar casi <strong>20.000€</strong> frente a los honorarios habituales.</p>
+      <div class="coupon-badge">🏷️ Cupón descuento: −600€</div>
+      <a href="tel:661078303" class="diamond-btn">💎 Quiero este servicio</a>
+    </div>
+
+  </div>
+</div>
+
+<!-- STATS -->
+<div class="spec-grid">
+  <div class="spec-row">
+    <div class="spec-item">
+      <div class="spec-num">15<em>min</em></div>
+      <div class="spec-label">Primera consulta gratuita y personalizada</div>
+    </div>
+    <div class="spec-item">
+      <div class="spec-num">~20<em>K€</em></div>
+      <div class="spec-label">Ahorro máximo frente a gestores tradicionales</div>
+    </div>
+    <div class="spec-item">
+      <div class="spec-num">−600<em>€</em></div>
+      <div class="spec-label">Descuento adicional con tu cupón promocional</div>
+    </div>
+  </div>
+</div>
+
+<!-- SERVICES -->
+<div class="services-section">
+  <div class="services-inner">
+    <div class="services-label">Nos especializamos en</div>
+    <div class="services-title">Soluciones hipotecarias a tu medida</div>
+    <div class="service-pills">
+      <div class="service-pill"><span class="service-pill-dot">◆</span> Primera vivienda</div>
+      <div class="service-pill"><span class="service-pill-dot">◆</span> Subrogación</div>
+      <div class="service-pill"><span class="service-pill-dot">◆</span> Mejora de hipoteca</div>
+      <div class="service-pill"><span class="service-pill-dot">◆</span> Autónomos</div>
+      <div class="service-pill"><span class="service-pill-dot">◆</span> Empresas</div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-content">
+    <div class="footer-top">
+      <div class="footer-brand">SFS <span>Crédit</span> — Soluciones Hipotecarias</div>
+      <a href="tel:661078303" class="footer-cta">📞 661 078 303</a>
+    </div>
+    <div class="footer-links">
+      <a class="footer-link" onclick="openPrivacy()">Política de Privacidad</a>
+      <span class="footer-sep">·</span>
+      <a class="footer-link" onclick="openPrivacy()">Aviso Legal</a>
+      <span class="footer-sep">·</span>
+      <a class="footer-link" onclick="openPrivacy()">Cookies</a>
+      <span class="footer-sep">·</span>
+      <span class="footer-email">Reclamaciones: <a href="mailto:reclamacionessfscredit@gmail.com">reclamacionessfscredit@gmail.com</a></span>
+    </div>
+  </div>
+</footer>
+
+<!-- MODAL PRIVACIDAD -->
+<div class="modal-overlay" id="privacyOverlay" onclick="closePrivacyModal(event)">
+  <div class="privacy-modal">
+    <button class="modal-close" onclick="closePrivacyDirect()">✕</button>
+    <h3>Política de Privacidad y Aviso Legal</h3>
+    <h4>Responsable del tratamiento</h4>
+    <p>SFS Crédit — Soluciones Hipotecarias. Contacto: 661 078 303.</p>
+    <h4>Datos que recogemos</h4>
+    <ul>
+      <li>Datos de contacto (nombre, teléfono, email) facilitados voluntariamente.</li>
+      <li>Datos económicos necesarios para el estudio hipotecario.</li>
+      <li>Datos de navegación a través de cookies técnicas y analíticas.</li>
+    </ul>
+    <h4>Finalidad</h4>
+    <p>Gestionar tu solicitud hipotecaria, enviarte información sobre nuestros servicios y cumplir con obligaciones legales.</p>
+    <h4>Tus derechos</h4>
+    <p>Tienes derecho de acceso, rectificación, supresión, limitación, portabilidad y oposición. Ejércelos escribiendo a:</p>
+    <p><a href="mailto:reclamacionessfscredit@gmail.com">reclamacionessfscredit@gmail.com</a></p>
+    <h4>Reclamaciones</h4>
+    <p>Puedes presentar una reclamación ante la AEPD en <a href="https://www.aepd.es" target="_blank">www.aepd.es</a> o contactarnos en <a href="mailto:reclamacionessfscredit@gmail.com">reclamacionessfscredit@gmail.com</a>.</p>
+    <h4>Cookies</h4>
+    <p>Usamos cookies técnicas necesarias y analíticas para mejorar nuestros servicios. Puedes rechazarlas desde el banner de cookies.</p>
+    <h4>Legitimación</h4>
+    <p>El tratamiento de tus datos se basa en tu consentimiento y en la ejecución de un contrato o precontrato de servicios hipotecarios.</p>
+    <br>
+    <button class="modal-submit" onclick="closePrivacyDirect()" style="max-width:180px;margin:0 auto">Cerrar</button>
+  </div>
+</div>
+
+<script>
+  function closeCookie(){document.getElementById('cookieBanner').classList.add('hidden');document.body.style.paddingBottom='0'}
+  function openPrivacy(){document.getElementById('privacyOverlay').classList.add('active');document.body.style.overflow='hidden'}
+  function closePrivacyDirect(){document.getElementById('privacyOverlay').classList.remove('active');document.body.style.overflow=''}
+  function closePrivacyModal(e){if(e.target===document.getElementById('privacyOverlay'))closePrivacyDirect()}
+</script>
+</body>
+</html>
